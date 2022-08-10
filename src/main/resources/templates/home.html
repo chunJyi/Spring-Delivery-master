@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorate="~{/layout/template.html}">
+
+<head>
+<meta charset="UTF-8">
+<title>Home</title>
+	<style>
+		.b{
+			background-color: paleturquoise;
+		}
+	</style>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		
+		<img th:if="${#lists.size(items) le 8}" class="img-fluid img-thumbnail" alt="Cover" th:src="@{/resources/image/cover.png}">
+		
+		<div class="three-col-grid mt-4">
+		
+			<div class="card" th:each="item: ${items}">
+				
+				<div class="card-header b" >
+					<span class="card-title" th:text="${item.name}"></span>
+					<a sec:authorize="isAnonymous() or hasRole('CUSTOMER')" 
+						th:href="@{/cart/add/{id}(id=${item.id})}" class="btn btn-link addToCart float-right">
+						<i class="fa fa-plus"></i>
+					</a>
+				</div>
+				
+				<img th:src="@{/resources/image/food.png}" class="card-img"></img>
+				
+				<div class="card-footer b">
+					<span th:text="${item.category.name}"></span>
+					<span class="float-right" th:text="|${#numbers.formatInteger(item.price, 3, 'POINT')} MMK|"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

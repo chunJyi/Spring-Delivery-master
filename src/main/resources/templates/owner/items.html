@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorate="~{/layout/template.html}" >
+<head>
+<meta charset="UTF-8">
+<title>Items</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		
+		<h3 class="mb-4">Item Management</h3>
+		
+		<form th:action="@{/owner/items}" class="form-inline">
+			<label class="mr-2">Category</label>
+			<select id="cat" class="form-control mr-2" name="cat" >
+				<option value="0">Select One</option>
+				<option th:each="c: ${categories}" 
+					th:selected="${param.cat == c.id}"
+					th:value="${c.id}" th:text="${c.name}"></option>
+			</select>
+			
+			<input type="submit" value="Search" class="btn btn-secondary mr-2" >
+		
+			<button id="addNew" type="button" class="btn btn-primary">Add New</button>
+		</form>
+		
+		<table class="table table-striped mt-4">
+			<thead>
+				<tr>
+					<td>Id</td>
+					<td>Category</td>
+					<td>Item</td>
+					<td>Unit Price</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="item: ${items}">
+					<td th:text="${item.id}">Id</td>
+					<td th:text="${item.category.name}">Category</td>
+					<td th:text="${item.name}">Item</td>
+					<td th:text="${item.price}">Unit Price</td>
+					<td>
+						<a th:href="@{/owner/items/{id}(id=${item.id})}" class="btn btn-link edit-item"><i class="fas fa-pencil-alt"></i></a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div layout:fragment="popups" id="editDialog" class="modal fade">
+		
+		<div class="modal-dialog">
+			<div class="modal-content">
+				
+				<div class="modal-header">
+					<h5 class="modal-tital">Add Item</h5>
+				</div>
+				
+				<div class="modal-body">
+					<form id="editForm" th:action="@{/owner/items}" th:object="${item}" method="post" >
+						<input type="hidden" th:field="*{id}" >
+						
+						<div class="form-group">
+							<label>Category</label>
+							<select class="form-control" th:field="*{category}">
+								<option th:each="c: ${categories}"
+									th:value="${c.id}" th:text="${c.name}">
+							</select>
+						</div>
+						<div class="form-group">
+							<label>Name</label>
+							<input class="form-control" th:field="*{name}" placeholder="Enter Name" required >
+						</div>
+						<div class="form-group">
+							<label>Price</label>
+							<input class="form-control" th:field="*{price}" placeholder="Enter Price" type="number" required >
+						</div>
+					</form>
+				</div>
+				
+				<div class="modal-footer">
+					<button id="saveBtn" class="btn btn-success">Save</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

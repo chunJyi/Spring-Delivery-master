@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+	<title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE" >Delivery</title>
+	
+	<link rel="stylesheet" th:href="@{/resources/css/bootstrap.min.css}" >
+	<link rel="stylesheet" th:href="@{/resources/css/all.min.css}" >
+	<link rel="stylesheet" th:href="@{/resources/css/common.css}" >
+	<link rel="stylesheet" href="../../static/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="../../static/css/all.min.css" >
+	
+	<script type="text/javascript" defer th:src="@{/resources/js/jquery.min.js}"></script>
+	<script type="text/javascript" defer th:src="@{/resources/js/popper.min.js}"></script>
+	<script type="text/javascript" defer th:src="@{/resources/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" defer th:src="@{/resources/js/common.js}"></script>
+    <style>
+        body{
+            background-color: #867e6621;
+        }
+    </style>
+</head>
+<body>
+
+	
+	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-secondary">
+		<div class="container">
+		
+			<a class="navbar-brand" th:href="@{/}"><h3><i class="fa fa-car text-info"></i>  Dream Delivery</h3></a>
+	
+			<div class="navbar-nav">
+				
+				<a th:href="@{/member/home}" class="nav-item nav-link" sec:authorize="hasRole('CUSTOMER')">
+					<i class="fa fa-home text-info"></i> Homed
+				</a>
+
+				<a th:href="@{/owner/home}" class="nav-item nav-link" sec:authorize="hasRole('OWNER')">
+					<i class="fa fa-home text-info"></i> Home
+				</a>
+
+<!--				<a class="nav-item nav-link" sec:authorize="hasRole('CUSTOMER') or isAnonymous()"-->
+<!--					th:each="category : ${categories}" -->
+<!--					th:href="@{/items(cat=${category.id})}"-->
+<!--					th:text="${category.name}"></a>-->
+<!--				<select name="categories" id="" sec:authorize="hasRole('CUSTOMER') or isAnonymous()">-->
+<!--					<option th:each="category : ${categories}">-->
+<!--                        <a class="nav-item nav-link" th:href="@{/items(cat=${category.id})}"-->
+<!--                            th:text="${category.name}"></a>-->
+<!--                    </option>-->
+<!--				</select>-->
+                <div class="nav-item dropdown my-2 my-lg-0"  sec:authorize="hasRole('CUSTOMER') or isAnonymous()">
+                    <a class="nav-link dropdown-toggle" id="navDropDown" data-toggle="dropdown">
+                        <i class="fa fa-box-open text-info">Category</i>
+                    </a>
+                    <div class="dropdown-menu" >
+                        <div >
+                            <a  class="dropdown-item" th:href="@{/items}">all
+                               </a>
+                        </div>
+                        <div th:each="category : ${categories}">
+                            <a  class="dropdown-item" th:href="@{/items(cat=${category.id})}"
+                                th:text="${category.name}" />
+                        </div>
+
+                    </div>
+
+                </div>
+					
+				<a th:href="@{/member/cart}" class="nav-item nav-link" sec:authorize="hasRole('CUSTOMER') or isAnonymous()">
+					<i class="fa fa-cart-plus text-info mr-1"></i>
+					<span class="badge badge-info" th:text="${itemCount}"></span>
+				</a>
+				
+				<a class="nav-item nav-link" th:href="@{/owner/categories}" sec:authorize="hasRole('OWNER')" ><i class="fa fa-tags text-info mr-2"></i> Categories</a>
+				
+				<a class="nav-item nav-link" th:href="@{/owner/items}" sec:authorize="hasRole('OWNER')"><i class="fa fa-gifts text-info mr-2"></i> Items</a>
+				
+				<a class="nav-item nav-link" th:href="@{/owner/members}" sec:authorize="hasRole('OWNER')"><i class="fa fa-users-cog text-info mr-2"></i> Members</a>
+				
+				
+				<div class="nav-item dropdown my-2 my-lg-0">
+					<a class="nav-link dropdown-toggle" id="navDropDown" data-toggle="dropdown">
+						<i class="fa fa-cog text-info"></i>
+					</a>
+					<div class="dropdown-menu" sec:authorize="isAnonymous()">
+						<a th:href="@{/login}" class="dropdown-item">Sign In</a>
+						<a th:href="@{/signup}" class="dropdown-item">Sign Up</a>
+					</div>
+					<div class="dropdown-menu" sec:authorize="isAuthenticated()">
+						<a id="signout" class="dropdown-item">Sign Out</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</nav>
+	
+	<section class="container mt-4">
+		<div layout:fragment="content"></div>
+	</section>
+	
+	<div layout:fragment="popups"></div>
+		
+	<footer>
+	
+	</footer>
+	
+	<form th:action="@{/logout}" method="post" id="logoutForm" class="d-none"></form>
+	
+</body>
+</html>

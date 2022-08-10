@@ -1,0 +1,23 @@
+spring:
+  thymeleaf:
+    cache: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spring_delivery
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 99
+
+
+my:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: chunjyicj@gmail.com
+    password: chungyi22
+    smtp: mail.smtp.starttls.enable
+    smtpTlsEnabled: true

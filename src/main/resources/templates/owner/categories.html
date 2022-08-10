@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorate="~{/layout/template.html}" >
+<head>
+<meta charset="UTF-8">
+<title>Category</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<h3 class="mb-4">Category Management</h3>
+		
+		<form class="form-inline mb-4" 
+			th:object="${category}"
+			th:action="@{/owner/categories}" method="post">
+			<label class="mr-3">Category</label>
+			<input class="form-control mr-3" th:field="*{name}" placeholder="Enter Category Name" required="required" >
+			<input type="submit" value="Add New" class="btn btn-outline-secondary">
+		</form>
+		
+		<div class="four-col-grid" th:if="${not #lists.isEmpty(categories)}" >
+			
+			<div class="card bg-info text-white" th:each="cat : ${categories}">
+				<div class="card-body">
+					<span th:text="${cat.name}">Name</span>
+					<span th:id="${cat.id}" class="float-right editCategory">
+						<i class="fa fa-edit"></i>
+					</span>
+				</div>
+			</div>	
+			
+		</div>
+		
+	</div>
+
+	<div layout:fragment="popups" id="editDialog" class="modal fade">
+		
+		<div class="modal-dialog">
+			<div class="modal-content">
+				
+				<div class="modal-header">
+					<h5 class="modal-tital">Edit Category</h5>
+				</div>
+				
+				<div class="modal-body">
+					<form id="editForm" th:action="@{/owner/categories}" method="post" >
+						<div class="form-group">
+							<label>Category</label>
+							<input id="editName" name="name" required="required" class="form-control" >
+						</div>
+					</form>
+				</div>
+				
+				<div class="modal-footer">
+					<button id="saveBtn" class="btn btn-success">Save</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</body>
+</html>

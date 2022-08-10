@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorate="~{/layout/template.html}" >
+<head>
+<meta charset="UTF-8">
+<title>My Cart</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		
+		<h3>My Cart</h3>
+		
+		<div class="row">
+			<div class="col-8">
+				<form id="checkOutForm" th:action="@{/member/cart}" method="post">
+					
+					<div class="form-row">
+						<div class="form-group col-6">
+							<label>Customer</label>
+							<input disabled="disabled" class="form-control" th:value="${invoice.customer.name}">
+						</div>
+						<div class="form-group col-6">
+							<label>Phone Number</label>
+							<input class="form-control" type="tel" name="phone" required="required" >
+						</div>
+					</div>
+				
+					<div class="form-row">
+
+						<div class="form-group col-4">
+							<label>Desire Date</label>
+							<input type="date" class="form-control" name="date" required="required">
+						</div>
+
+						<div class="form-group col-4">
+							<label>Time From</label>
+							<input type="time" class="form-control" name="timeFrom" required="required">
+						</div>
+
+						<div class="form-group col-4">
+							<label>Time To</label>
+							<input type="time" class="form-control" name="timeTo" required="required">
+						</div>
+					</div>
+					
+					<div class="form-row">
+						<div class="col-3 from-group">
+							<label>Division</label>
+							<input class="form-control" name="division" required="required" th:value="${invoice.address.division}">
+						</div>
+						<div class="col-3 from-group">
+							<label>Township</label>
+							<input class="form-control" name="township" required="required" th:value="${invoice.address.township}">
+						</div>
+						<div class="col-6 from-group">
+							<label>Address</label>
+							<input class="form-control" name="address" required="required" th:value="${invoice.address.address}">
+						</div>
+					</div>
+					
+
+					<h4 class="mt-4">Orders</h4>
+					
+					<table class="table table-striped">
+						<tr>
+							<td>Item</td>
+							<td class="text-right" >Unit Price</td>
+							<td class="text-right" >Count</td>
+							<td class="text-right" >Total</td>
+						</tr>
+						<tr th:each="od : ${invoice.orders}">
+							<td th:text="${od.item.name}">Item</td>
+							<td class="text-right" th:text="${od.unitPrice}">Unit Price</td>
+							<td class="text-right" th:text="${od.quentity}">Count</td>
+							<td class="text-right" th:text="${od.unitPrice * od.quentity}">Total</td>
+						</tr>
+						
+						<tr>
+							<td class="text-right" colspan="3">Sub Total</td>
+							<td class="text-right" th:text="${invoice.summary['subTotal']}"></td>
+						</tr>
+						<tr>
+							<td class="text-right" colspan="3">Tax</td>
+							<td class="text-right" th:text="${invoice.summary['tax']}"></td>
+						</tr>
+						<tr>
+							<td class="text-right" colspan="3">Total</td>
+							<td class="text-right" th:text="${invoice.summary['total']}"></td>
+						</tr>
+					</table>
+					
+					<button type="submit" class="btn btn-secondary">Check Out</button>
+				</form>
+			</div>
+		</div>
+
+
+		
+	</div>
+</body>
+</html>

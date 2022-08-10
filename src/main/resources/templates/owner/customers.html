@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorate="~{/layout/template.html}" >
+<head>
+<meta charset="UTF-8">
+<title>Customers</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<h3 class="mb-4">Customer Management</h3>
+		
+		<form th:action="@{/owner/members}" class="form-inline">
+			<label class="mr-2">Name</label>
+			<input name="name" th:value="${param.name}" class="form-control mr-4" placeholder="Customer Name">	
+			
+			<input id="blocked" type="checkbox" name="blocked" value="true" th:checked="${param.blocked}" class="form-check-input mr-2">
+			<label for="blocked" class="mr-4">Blocked Users</label>
+			
+			<input type="submit" value="Search" class="btn btn-secondary" >
+		</form>
+		
+		<table class="table table-striped mt-4">
+			<thead>
+				<tr>
+					<td>Id</td>
+					<td>Customer</td>
+					<td>Email</td>
+					<td>Role</td>
+					<td>Enable</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="ac: ${accounts}">
+					<td th:text="${ac.id}"></td>
+					<td th:text="${ac.name}"></td>
+					<td th:text="${ac.email}"></td>
+					<td th:text="${ac.role}"></td>
+					<td th:text="${ac.enable}"></td>
+					<td>
+						<a th:href="@{/owner/members/{id}(id=${ac.id})}" href="#"
+							class="btn btn-link mr-2 burn-user">
+							<i class="fa fa-user-slash"></i>
+						</a>
+						<a th:href="@{/owner/members/changepass/{id}(id=${ac.id})}" 
+							class="btn btn-link changepass">
+							<i class="fa fa-key"></i>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>	
+		
+		<form th:action="@{/owner/members}" method="post" id="burnForm" class="d-none"></form>
+	</div>
+	
+	<div layout:fragment="popups" id="editDialog" class="modal fade">
+		
+		<div class="modal-dialog">
+			<div class="modal-content">
+				
+				<div class="modal-header">
+					<h5 class="modal-tital">Change Password</h5>
+				</div>
+				
+				<div class="modal-body">
+					<form id="editForm" th:action="@{/owner/members}" method="post" >
+						<div class="form-group">
+							<label>Password</label>
+							<input id="passowrd" name="password" type="password" required="required" class="form-control" >
+						</div>
+					</form>
+				</div>
+				
+				<div class="modal-footer">
+					<button id="saveBtn" class="btn btn-success">Save</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

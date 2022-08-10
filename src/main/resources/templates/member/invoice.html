@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorate="~{/layout/template.html}" >
+<head>
+<meta charset="UTF-8">
+<title>Invoice Details</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<h3>Invoice No.<span th:text="${invoice.id}"></span></h3>
+
+		<div class="row">
+			<div class="col-8">
+				<form id="invForm" th:action="@{/member/invoice/{id}(id=${invoice.id})}" method="post">
+
+					<div class="form-row">
+						<div class="form-group col-6">
+							<label>Customer</label>
+							<input disabled="disabled" class="form-control" th:value="${invoice.customer.name}">
+						</div>
+						<div class="form-group col-6">
+							<label>Phone Number</label>
+							<input disabled="disabled" class="form-control" type="tel" name="phone" required="required" th:value="${invoice.phone}" >
+						</div>
+					</div>
+
+					<div class="form-row">
+
+						<div class="form-group col-6">
+							<label>Invoice Date Time</label>
+							<input class="form-control" disabled="disabled" th:value="${#temporals.format(invoice.orderTime, 'yyyy-MM-dd HH:mm')}"  >
+						</div>
+
+						<div class="form-group col-6">
+							<label>Desire  Date Time</label>
+							<input class="form-control" disabled="disabled" th:value="|${invoice.desireDate} [${invoice.timeFrom} - ${invoice.timeTo}]|" >
+						</div>
+
+					</div>
+					<div class="form-group">
+						<label>Status</label>
+						<input class="form-control" disabled="disabled" th:value="${invoice.status}">
+					</div>
+
+					<div class="from-group">
+						<label>Address</label>
+						<input class="form-control" disabled="disabled" th:value="${invoice.address}">
+					</div>
+
+
+					<h4 class="mt-4">Orders</h4>
+
+					<table class="table table-striped">
+						<tr>
+							<td>Item</td>
+							<td class="text-right" >Unit Price</td>
+							<td class="text-right" >Count</td>
+							<td class="text-right" >Total</td>
+						</tr>
+
+						<tr th:each="od : ${invoice.orders}">
+							<td th:text="${od.item.name}">Item</td>
+							<td class="text-right" th:text="${od.unitPrice}">Unit Price</td>
+							<td class="text-right" th:text="${od.quentity}">Count</td>
+							<td class="text-right" th:text="${od.unitPrice * od.quentity}">Total</td>
+						</tr>
+
+						<tr>
+							<td class="text-right" colspan="3">Sub Total</td>
+							<td class="text-right" th:text="${invoice.summary['subTotal']}"></td>
+						</tr>
+						<tr>
+							<td class="text-right" colspan="3">Tax</td>
+							<td class="text-right" th:text="${invoice.summary['tax']}"></td>
+						</tr>
+						<tr>
+							<td class="text-right" colspan="3">Total</td>
+							<td class="text-right" th:text="${invoice.summary['total']}"></td>
+						</tr>
+					</table>
+
+					<button type="button" id="cancel" class="btn btn-primary" th:if="${invoice.status == T(com.jdc.spring.delivery.entiity.Orders.Status).Order}">Cancel</button>
+					<button type="button" id="finish" class="btn btn-primary" th:if="${invoice.status == T(com.jdc.spring.delivery.entiity.Orders.Status).Order}" sec:authorize="hasRole('ROLE_OWNER')">Finish</button>
+					<button type="button" id="print" class="btn btn-primary">Print</button>
+
+				</form>
+
+				<form id="printForm" th:action="@{/member/invoice/print/{id}(id=${invoice.id})}" class="displayNone"></form>
+			</div>
+		</div>
+
+
+
+
+	</div>
+</body>
+</html>

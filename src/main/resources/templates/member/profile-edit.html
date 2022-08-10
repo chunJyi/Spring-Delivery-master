@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorate="~{/layout/template.html}" >
+<head>
+<meta charset="UTF-8">
+<title>Edit Profile</title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		
+		<h3>Edit Profile</h3>
+		
+		<div class="row">
+			<div class="col-8">
+				<form th:object="${profile}" th:action="@{/member/profile}" method="post">
+					
+					<input type="hidden" th:field="*{id}">
+					
+					<div class="form-group">
+						<label>Name</label>
+						<input th:field="*{account.name}" class="form-control">
+					</div>
+					
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label>Date of Birth</label>
+							<input th:field="*{dob}" type="date" class="form-control">
+						</div>
+	
+						<div class="form-group col-md-6">
+							<label>Gender</label>
+							<select th:field="*{gender}" class="form-control">
+								<option th:each="g: ${genders}" th:value="${g}" th:text="${g}" >
+							</select>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label>State</label>
+							<input th:field="*{address.township}" class="form-control">
+						</div>
+	
+						<div class="form-group col-md-6">
+							<label>Township</label>
+							<input th:field="*{address.division}" class="form-control">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>Address</label>
+						<input th:field="*{address.address}" class="form-control">
+					</div>
+					
+					<button type="submit" class="btn btn-secondary">
+						<i class="fa fa-save"></i> Save
+					</button>
+				</form>
+			</div>
+		</div>
+		
+	</div>
+
+</body>
+</html>

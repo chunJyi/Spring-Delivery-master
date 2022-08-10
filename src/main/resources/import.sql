@@ -1,0 +1,1 @@
+insert into account(name, email, password, enable, role) values ('Owner', 'owner@gmail.com', 'dbe8342b-286c-418f-9852-79ba70bb3775', true, 'ROLE_OWNER');
